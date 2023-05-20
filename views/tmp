@@ -1,0 +1,52 @@
+          <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-3 me-5 ms-5 g-4">
+              <div class="col">
+                <div class="card bg-primary text-white text-center p-3">
+                  <div class="card-body">
+                    <h5 class="card-title"># of Images</h5>
+                    <p class="card-text display-4" id="summary-icon"><%- analysis.static.summary["icon"] %> </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card bg-secondary text-white text-center p-3">
+                  <div class="card-body">
+                    <h5 class="card-title"># of Audios</h5>
+                    <p class="card-text display-4" id="summary-audio"><%- analysis.static.summary["audio"] %> </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card bg-success text-white text-center p-3">
+                  <div class="card-body">
+                    <h5 class="card-title"># of Videos</h5>
+                    <p class="card-text display-4" id="summary-video"><%- analysis.static.summary["video"] %> </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card bg-danger text-white text-center p-3">
+                  <div class="card-body">
+                    <h5 class="card-title"># of Activities</h5>
+                    <p class="card-text display-4" id="summary-activities"><%= analysis.static.summary["activities"] %></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card bg-warning text-dark text-center p-3">
+                  <div class="card-body">
+                    <h5 class="card-title"># of Services</h5>
+                    <p class="card-text display-4" id="summary-services"><%= analysis.static.summary["services"] %></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card bg-info text-white text-center p-3">
+                  <div class="card-body">
+                    <h5 class="card-title"># of Permissions</h5>
+                    <p class="card-text display-4" id="summary-permissions"><%= analysis.static.summary["permissions"] %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>

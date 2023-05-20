@@ -1,0 +1,377 @@
+<%- include myheader.ejs %>
+  
+    <div class="container mt-2 ">
+      <div class="card mb-4">
+        <div class="card-header fs-5">
+          <i class="fa-solid fa-circle-info"></i>
+          File Information
+        </div>
+        <div class="card-body">
+          <!-- <div class="card mb-3" style="max-width: 540px;"> -->
+            <div class="row g-0">
+              <div class="col-md-2 text-center pt-4">
+                <% if(analysis.state === 4){ %>
+                  <% if(analysis.predit_class === "Benign"){ %>
+                  <div class="rounded-circle border border-success border-5 d-flex align-items-center justify-content-center" style="width: 100%; height: 0; padding-bottom: 100%;">
+                    <div class="w-100 text-center mt-5 text-success" style="padding-top: 50%;">
+                      <p class="mt-4 h3"><%= analysis.predit_class %></p>
+                      <p class="mb-0 h4"><%= analysis.predit_ratio %> % </p>
+                    </div>
+                  </div>
+                  <% }else { %>
+                  <div class="rounded-circle border border-danger border-5 d-flex align-items-center justify-content-center" style="width: 100%; height: 0; padding-bottom: 100%;">
+                    <div class="w-100 text-center mt-5 text-danger" style="padding-top: 50%;">
+                      <p class="mt-4 h3"><%= analysis.predit_class %></p>
+                      <p class="mb-0 h4"><%= analysis.predit_ratio %> % </p>
+                    </div>
+                  </div>
+                  <% } %>
+                <% }else if(analysis.state === 3){ %>
+                <% }else if(analysis.state === 2){ %>
+                <% }else if(analysis.state === 1){ %>
+                <% }else if(analysis.state === 0){ %>
+                <% } %>
+              </div>
+              <div class="col-md-10">
+                <div class="card-body">
+                  <table class="table table-borderless">
+				<% if(analysis.fileName){ %>
+                    <tr>
+                      <th style="width: 150px;">Filename</th>
+                      <td><%= analysis.fileName %></td>
+                    </tr>
+				<% } %>
+                    <!-- <tr>
+                      <th style="width: 150px;">Size</th>
+                      <td>2.94KB</td>
+                    </tr> -->
+				<% if(analysis.md5){ %>                    
+					<tr>
+                      <th style="width: 150px;">MD5</th>
+                      <td><%= analysis.md5 %></td>
+                    </tr>
+					<% } %>
+				<% if(analysis.sha256){ %>
+                    <tr>
+                      <th style="width: 150px;">SHA-256</th>
+                      <td><%= analysis.sha256 %></td>
+                    </tr>
+				<% } %>
+        <% if(analysis.sha256){ %>
+          <tr>
+            <th style="width: 150px;">SHA-1</th>
+            <td><%= analysis.sha1 %></td>
+          </tr>
+        <% } %>
+				<% if(analysis.packageName && analysis.packageName != null){ %>
+                    <tr>
+                      <th style="width: 150px;">Package Name</th>
+                      <td><%= analysis.packageName %></td>
+                    </tr>
+				<% } %>
+                    <tr>
+                      <th style="width: 150px;">Status</th>
+                      <td id="status">
+                        <% if(analysis.state === 4){ %>
+                          <span class="badge bg-success fs-6">
+                            Done <i class="fa-solid fa-check"></i>
+                          </span>
+                        <% }else if(analysis.state === 3){ %>
+                          <span class="badge bg-success fs-6">
+                            In progress
+                            <i class="fas fa-cog fa-spin"></i>
+                          </span>
+                        <% }else if(analysis.state === 2){ %>
+                          <span class="badge bg-success fs-6">Queued <i class="fa-sharp fa-regular fa-list"></i></span>
+                        <% }else if(analysis.state === 1){ %>
+                          <span class="badge bg-success fs-6">Awaiting approval <i class="fa-sharp fa-regular fa-list"></i></span>
+                        <% }else if(analysis.state === 0){ %>
+                          <!-- Button trigger modal -->
+                          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Error <i class="fa-solid fa-circle-exclamation fa-fade"></i>
+                          </button>
+                          <!-- Modal -->
+                          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="staticBackdropLabel">Show Error</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <%= analysis.error %>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        <% } %>
+                      </td>
+                    </tr>
+
+                  </table>
+                  
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-4 col-lg-6  ">
+          <div class="card-header fs-5">
+            <i class="fa-solid fa-circle-info"></i>
+            APK analysis summary 
+          </div>
+          <% if(analysis.static){ %>
+            <table class="table table-borderless">
+                <tr>
+                  <th style="width: 250px;">Number of images</th>
+                  <td id="summary-icon"><%- analysis.static.summary["icon"] %></td>
+                  <th style="width: 250px;">Number of audios</th>
+                  <td id="summary-audio"><%- analysis.static.summary["audio"] %></td>
+                </tr>
+                <tr>
+                  <th style="width: 250px;">Number of videos</th>
+                  <td id="summary-video"><%- analysis.static.summary["video"] %></td>
+                  <th style="width: 250px;">Number of activities</th>
+                  <td id="summary-activities"><%- analysis.static.summary["activities"] %></td>
+                </tr>
+                <tr>
+                  <th style="width: 250px;">Number of exported</th>
+                  <td id="summary-exported"><%- analysis.static.summary["exported"] %></td>
+                  <th style="width: 250px;">Number of backups</th>
+                  <td id="summary-backup"><%- analysis.static.summary["backup"] %></td>
+                </tr>
+                <tr>
+                  <th style="width: 250px;">Number of meta</th>
+                  <td id="summary-meta"><%- analysis.static.summary["meta"] %></td>
+                  <th style="width: 250px;">Number of services</th>
+                  <td id="summary-services"><%- analysis.static.summary["services"] %></td>
+                </tr>
+                <tr>
+                  <th style="width: 250px;">Number of permissions</th>
+                  <td id="summary-permissions"><%- analysis.static.summary["permissions"] %></td>
+                  <th style="width: 250px;">Number of actions</th>
+                  <td id="summary-actions"><%- analysis.static.summary["actions"] %></td>
+                </tr>
+                <tr>
+                  <th style="width: 250px;">Number of providers</th>
+                  <td id="summary-providers"><%- analysis.static.summary["providers"] %></td>
+                  <th style="width: 250px;">Number of receivers</th>
+                  <td id="summary-receivers"><%- analysis.static.summary["receivers"] %></td>
+                </tr>
+                <tr>
+                  <th style="width: 250px;">Number of categories</th>
+                  <td id="summary-categories"><%- analysis.static.summary["categories"] %></td>
+                </tr>
+              </table>
+          <% } %>
+        </div>
+  
+        <div class="mb-4 col-lg-6">
+          <div class="card-header fs-5 bg-dark text-white">
+            <i class="fa-solid fa-terminal"></i> Console Log</div>
+          <div class="card-body bg-secondary">
+            <div class="list-group list-group-flush overflow-auto" id="log-stream" style="height: 250px;">
+              <% if(analysis.consoleLog){ %>
+              <% analysis.consoleLog.split('\n').forEach(function(line) { %>
+                <% if (line.trim().length > 0) { %>
+                  <li class="text-white"><%= line.trim() %></li>
+                <% } %>
+              <% }); %>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+
+
+
+      <div class="accordion mb-4" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item ">
+          <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+            <button class="fs-5 accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+              <i class="fas fa-mobile-alt me-2"> </i>
+              Static Analysis
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+            <div class="accordion-body">
+
+              <% if(analysis.static){ %>
+                <% Object.keys(analysis.static).forEach(function(key){%>
+                  <% if(analysis.static[key].length > 0){ %>
+                  <div class="row mt-2" id="static-<%- key %>">
+                    <h6><%- key %> <span class="badge bg-info text-dark"><%= analysis.static[key].length %></span></h6>              
+                    <ul class="list-group col-11 ms-auto">
+                      <% for(var i=0; i<analysis.static[key].length; i++) {%>
+                      <li class="list-group-item"><%= analysis.static[key][i]%></li>
+                      <% } %>
+                    </ul>
+                  </div>
+                  <% }else { %>
+                    <div class="row mt-2" id="static-<%- key %>" style="display: none;">
+                      <h6><%- key %> <span class="badge bg-info text-dark"><%= analysis.static[key].length %></span></h6>              
+                      <ul class="list-group col-11 ms-auto">
+                        <% for(var i=0; i<analysis.static[key].length; i++) {%>
+                        <li class="list-group-item"><%= analysis.static[key][i]%></li>
+                        <% } %>
+                      </ul>
+                    </div>
+                  <% } %>
+      
+                <% }) %>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion mb-4" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+            <button class="fs-5 accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+              <i class="fas fa-chart-line me-2"></i>
+              Dynamic Analysis
+            </button>
+          </h2>
+          <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+            <div class="accordion-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Before Reboot</th>
+                    <th scope="col">After Reboot</th>
+                    <th scope="col">Behavior</th>
+                  </tr>
+                </thead>
+                <tbody id = "dynamic">
+                  <% if(analysis.dynamic_before_reboot){ %>
+                  <% Object.keys(analysis.dynamic_before_reboot).forEach(function(key){%>
+                  <tr>
+                    <th scope="row" class="col-3"><%- key %> </th>
+                    <td id="before-<%- key %>"> <%- analysis.dynamic_before_reboot[key] %> </td>
+                    <% if(analysis.dynamic_after_reboot){ %>
+                    <td id="after-<%- key %>"> <%- analysis.dynamic_after_reboot[key] %> </td>
+                    <% if(analysis.dynamic_after_reboot[key] - analysis.dynamic_before_reboot[key] > 0){ %>
+                      <td>
+                        <i class="fas fa-long-arrow-alt-up"></i> 
+                        <%- analysis.dynamic_after_reboot[key] - analysis.dynamic_before_reboot[key] %> 
+                      </td>
+                    <% } else if(analysis.dynamic_after_reboot[key] - analysis.dynamic_before_reboot[key] < 0){ %>
+                      <td>
+                        <i class="fas fa-long-arrow-alt-down"></i>
+                        <%- -analysis.dynamic_after_reboot[key] + analysis.dynamic_before_reboot[key] %> 
+                      </td>
+                    <% } else { %>
+                      <td>
+                        0
+                      </td>
+                    <% } %>
+                    <% } else { %>
+                      <td></td>
+                      <td></td>
+                    <% } %>
+                  <% }) %>
+                  <% } %>
+                </tbody>
+              </table>
+            
+            </div>
+          </div>
+        </div>
+      </div>     
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <% if(analysis.state === 1 || analysis.state === 2 || analysis.state === 3){ %>
+    <script>
+      // Hàm để gửi yêu cầu AJAX và cập nhật dữ liệu
+      function updateDataIfChanged() {
+        var url = window.location.href +'/updatedata'
+        var flagDynamic = true;
+        var currentState = ""; // Biến lưu trạng thái hiện tại, cần cập nhật từ phía máy chủ hoặc từ nguồn dữ liệu khác
+        // Gửi yêu cầu AJAX để kiểm tra sự thay đổi của state
+        $.ajax({
+          url: url,
+          method: 'GET',
+          success: function(response) {
+            var data = response.data; // Dữ liệu trả về từ API
+            if (response.state === 1){
+              $('#status').empty();
+              $('#status').append('<span class="badge bg-success fs-6">In progress <i class="fas fa-cog fa-spin"></i></span>')
+              Object.keys(data.summary).forEach(function(key) {
+                $('#summary-'+key).text(data.summary[key])
+              });
+
+
+              Object.keys(data).forEach(function(key) {
+                var value = data[key];
+                var $staticDiv = $('#static-' + key);
+                if (value.length > 0) {
+                  $staticDiv.show();
+                  $staticDiv.find('.badge').text(value.length);
+                  var $listGroup = $staticDiv.find('.list-group');
+                  $listGroup.empty();
+                  value.forEach(function(item) {
+                    $listGroup.append('<li class="list-group-item">' + item + '</li>');
+                  });
+                } else {
+                  $staticDiv.hide();
+                }
+              });
+            } else if (response.state === 2){
+              if (flagDynamic) {
+                var $dynamicDiv = $('#dynamic');
+                Object.keys(data).forEach(function(key) {
+                  var value = data[key];
+                  $dynamicDiv.append('<tr><th scope="row" class="col-3">'+key+'</th><td id="before-'+key+'"> '+value+' </td><td id="after-'+key+'"></td><td></td></tr>');
+                });
+                flagDynamic = false;
+              }
+              
+
+
+            } else if (response.state === 3){
+              Object.keys(data).forEach(function(key) {
+                var value = data[key];
+                var $tdElement = $('#after-' + key);
+                $tdElement.text(value);
+              });
+            } else if (response.state === 4) {
+              location.reload();
+            }
+          }
+        });
+      }
+      // Kiểm tra sự thay đổi của state định kỳ (mỗi giây)
+      setInterval(updateDataIfChanged, 5000);
+    </script>
+    <% } %>
+
+    <script>
+      const logElement = document.getElementById('log-stream');
+      
+      var urlLog = window.location.href +'/log-stream';
+      // Kết nối đến endpoint SSE
+      const eventSource = new EventSource(urlLog);
+
+      // Xử lý thông báo SSE từ máy chủ
+      eventSource.onmessage = (event) => {
+        const newData = event.data;
+        // Cập nhật dòng dữ liệu console log mới trên trang web
+        const logItem = document.createElement('li');
+        logItem.textContent = newData;
+        logItem.className = "text-white";
+        logElement.appendChild(logItem);
+        logElement.scrollTop = logElement.scrollHeight;
+      };
+
+    </script>
+  </body>
+</html>
