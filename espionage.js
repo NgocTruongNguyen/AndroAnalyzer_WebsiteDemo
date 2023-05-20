@@ -5,9 +5,9 @@ const multiparty = require('multiparty');
 
 const Analysis = mongoose.model('Analysis');
 
-const espionage = {};
+const androanalyzer = {};
 
-espionage.analyse = function (req, res, next) {
+androanalyzer.analyse = function (req, res, next) {
 	const form = new multiparty.Form();
 	form.parse(req, function (err, fields, files) {
 		
@@ -19,7 +19,7 @@ espionage.analyse = function (req, res, next) {
 		for(let i = 0; i < files.upload.length; i++){
 			let newAnalysis = null;
 			const filePath = files.upload[i].path;
-			espionage.fileHash(filePath, 'sha256').then(
+			androanalyzer.fileHash(filePath, 'sha256').then(
 				(hash) => {
 					newAnalysis = new Analysis({
 						sha256: hash,
@@ -60,12 +60,12 @@ espionage.analyse = function (req, res, next) {
 						deviceType: deviceType
 						
 					});
-					return espionage.fileHash(filePath, 'sha1');
+					return androanalyzer.fileHash(filePath, 'sha1');
 				}
 			).then(
 				(hash) => {
 					newAnalysis.sha1 = hash;
-					return espionage.fileHash(filePath, 'md5');
+					return androanalyzer.fileHash(filePath, 'md5');
 				}
 			).then(
 				(hash) => {
@@ -73,7 +73,7 @@ espionage.analyse = function (req, res, next) {
 					if(i == 0){
 						res.redirect('/hybridanalysis/' + newAnalysis.sha256); //Redirect user after all 3 hashes are computed
 					}
-					return espionage.checkIfAPK(newAnalysis);
+					return androanalyzer.checkIfAPK(newAnalysis);
 				}
 			).then(
 				(properAPK) => {
@@ -87,14 +87,14 @@ espionage.analyse = function (req, res, next) {
 						newAnalysis.state = 0;
 						newAnalysis.error = "Failed APK validation!";
 					}
-					return espionage.queueForPhone(newAnalysis);
+					return androanalyzer.queueForPhone(newAnalysis);
 				}
 			);
 		}
 	});
 }
 
-espionage.checkIfAPK = function (newAnalysis) {
+androanalyzer.checkIfAPK = function (newAnalysis) {
 	return new Promise((resolve, reject) => {
 		const apkMagic = Buffer.from([0x50, 0x4b, 0x03, 0x04]);
 
@@ -107,7 +107,7 @@ espionage.checkIfAPK = function (newAnalysis) {
 	});
 }
 
-espionage.queueForPhone = function (newAnalysis) {
+androanalyzer.queueForPhone = function (newAnalysis) {
 	return new Promise((resolve, reject) => {
 		newAnalysis.save();
 		return resolve();
@@ -115,7 +115,7 @@ espionage.queueForPhone = function (newAnalysis) {
 }
 
 //Thanks https://gist.github.com/GuillermoPena/9233069#gistcomment-2364896
-espionage.fileHash = function (filename, algorithm) {
+androanalyzer.fileHash = function (filename, algorithm) {
 	return new Promise((resolve, reject) => {
 		// Algorithm depends on availability of OpenSSL on platform
 		// Another algorithms: 'sha1', 'md5', 'sha256', 'sha512' ...
@@ -136,4 +136,4 @@ espionage.fileHash = function (filename, algorithm) {
 	});
 }
 
-module.exports = espionage;
+module.exports = androanalyzer;

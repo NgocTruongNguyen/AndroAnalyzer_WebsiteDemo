@@ -6,7 +6,7 @@
 
 const app = require('../app');
 const config = require('../config');
-const debug = require('debug')('espionage:server');
+const debug = require('debug')('androanalyzer:server');
 const fs = require('fs');
 const path = require('path');
 
