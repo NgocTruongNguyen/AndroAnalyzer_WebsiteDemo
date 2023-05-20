@@ -1,11 +1,11 @@
-.cic-logo-box {
+.logo-box {
 	display: flex;
 	align-items: center;
 	font-size: 1.4em;
 	font-weight: 600;
 }
 
-.cic-logo-box>img {
+.logo-box>img {
 	height: 1.4em;
 }
 
